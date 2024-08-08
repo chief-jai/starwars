@@ -1,3 +1,1 @@
 # React + TypeScript + Vite
-
-Test
