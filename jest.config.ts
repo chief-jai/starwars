@@ -17,11 +17,21 @@ export default {
       },
     ],
   },
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  modulePaths: ["src", "test"],
   moduleNameMapper: {
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
     "^.+\\.svg$": "jest-transformer-svg",
   },
-
+  collectCoverage: true,
+  coverageThreshold: {
+    global: {
+      functions: 80,
+      lines: 80,
+    },
+  },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   setupFiles: ["<rootDir>/jest.polyfills.ts"],
+  coveragePathIgnorePatterns: ["styles.ts"],
 };
