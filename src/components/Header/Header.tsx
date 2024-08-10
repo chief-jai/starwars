@@ -11,6 +11,9 @@ import {
   TitleIconContainer,
 } from "./styles";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import IconButton from "@mui/joy/IconButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 interface HeaderProps {
   id: string;
@@ -20,6 +23,7 @@ interface HeaderProps {
   description?: string;
   buttons?: Array<ReactNode>;
   className?: string;
+  onBack?: () => void;
 }
 
 function Header({
@@ -30,11 +34,18 @@ function Header({
   description,
   buttons,
   className,
+  onBack,
 }: HeaderProps) {
   return (
     <Container id={id} className={className}>
       <TextContainer>
         <TitleContainer>
+          {onBack && (
+            <IconButton aria-label="back" onClick={onBack}>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </IconButton>
+          )}
+
           <TitleIconContainer>
             <TitleIcon icon={icon} />
           </TitleIconContainer>

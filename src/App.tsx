@@ -1,13 +1,13 @@
 import Sidebar from "components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
-import { Container } from "styles";
+import { AppContainer } from "styles";
 
 function App() {
   return (
-    <Container>
+    <AppContainer>
       <Sidebar />
       <Outlet />
-    </Container>
+    </AppContainer>
   );
 }
 

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import CharactersList from "./CharactersList";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,23 +33,32 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("Characters List", () => {
-  it("should render the CharactersList component with correct title in header", () => {
+  it("should render the CharactersList component with correct title in header", async () => {
     renderCharacterList();
 
-    expect(screen.getByText(/characters/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      await screen.getByRole("heading", {
+        name: /characters/i,
+        level: 1,
+      })
+    ).toBeInTheDocument();
   });
 
   it("should render the CharactersList component with loading text", () => {
     renderCharacterList();
 
-    expect(screen.getByText(/loading.../i)).toBeInTheDocument();
+    expect(screen.getByTestId("loadingAnimation")).toBeInTheDocument();
   });
 
   it("should render the CharactersList component with correct subtitle in header", async () => {
     renderCharacterList();
 
     await waitFor(() => {
-      expect(screen.queryByText(/loading.../i)).not.toBeInTheDocument();
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
     expect(await screen.findByText(/page 1 of 1/i)).toBeInTheDocument();
@@ -62,8 +71,8 @@ describe("Characters List", () => {
   it("should render the CharactersList component with correct character data", async () => {
     renderCharacterList();
 
-    await waitFor(async () => {
-      expect(await screen.findByText("Loading...")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
     expect(screen.getByText(/luke skywalker/i)).toBeInTheDocument();
@@ -77,19 +86,37 @@ describe("Characters List", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render the CharactersList component with appropriate buttons", () => {
+  it("should render the CharactersList component with appropriate buttons", async () => {
     renderCharacterList();
 
-    expect(screen.getByRole("button", { name: /previous/i })).toBeDisabled();
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
 
-    expect(screen.getByRole("button", { name: /next/i })).toBeDisabled();
+    const previousButton = screen.getByRole("button", { name: /previous/i });
+    const nextButton = screen.getByRole("button", { name: /next/i });
+
+    expect(previousButton).toBeDisabled();
+    expect(nextButton).toBeDisabled();
+
+    const arrowLeftIcon = within(previousButton).getByRole("img", {
+      hidden: true,
+    });
+
+    const arrowRightIcon = within(nextButton).getByRole("img", {
+      hidden: true,
+    });
+
+    expect(arrowLeftIcon).toHaveAttribute("data-icon", "arrow-left");
+
+    expect(arrowRightIcon).toHaveAttribute("data-icon", "arrow-right");
   });
 
   it("should trigger navigation to character details page on clicking view button", async () => {
     renderCharacterList();
 
-    await waitFor(async () => {
-      expect(await screen.findByText("Loading...")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
     const user = userEvent.setup();

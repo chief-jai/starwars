@@ -1,10 +1,10 @@
 import { faEarthEurope } from "@fortawesome/free-solid-svg-icons";
 import Header from "components/Header/Header";
-import { HeaderContainer, PlanetsContainer } from "./styles";
+import { HeaderContainer, Container } from "styles";
 
 function PlanetsList() {
   return (
-    <PlanetsContainer>
+    <Container>
       <HeaderContainer>
         <Header
           id="characterHeader"
@@ -13,7 +13,7 @@ function PlanetsList() {
           subtitle={"0 Planets Found"}
         />
       </HeaderContainer>
-    </PlanetsContainer>
+    </Container>
   );
 }
 

@@ -4,48 +4,43 @@ import {
   useGetCharacters,
   useGetPlanets,
 } from "services/hooks/starwars/starwars";
-import { CardContainer, CharacterContainer, HeaderContainer } from "./styles";
+import {
+  BodyContainer,
+  Container,
+  HeaderContainer,
+  LoaderContainer,
+} from "styles";
 import {
   faArrowLeft,
   faArrowRight,
   faLocationDot,
+  faUser,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
 import {
   capitalizeFirstCharacter,
-  getCharacterId,
+  getId,
   getCharacterImageUrl,
-} from "./helpers";
+} from "../../utils/helpers";
 import Button from "@mui/joy/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Typography from "@mui/joy/Typography";
-import { CardContent } from "@mui/joy";
+import CardContent from "@mui/joy/CardContent";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 function CharactersList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [planetUrls, setPlanetUrls] = useState<string[]>([]);
-  const {
-    data: characterData,
-    isSuccess: isCharactersSuccess,
-    isLoading: isCharactersLoading,
-  } = useGetCharacters(currentPage.toString());
-  const {
-    data: planetData,
-    isSuccess: isPlanetsSuccess,
-    isLoading: isPlanetsLoading,
-  } = useGetPlanets(planetUrls);
+  const { data: characterData, isSuccess: isCharactersSuccess } =
+    useGetCharacters(currentPage.toString());
+  const { data: planetData } = useGetPlanets(planetUrls);
 
   const navigate = useNavigate();
 
-  const isLoading = isCharactersLoading || isPlanetsLoading;
-  const isSuccess = isCharactersSuccess && isPlanetsSuccess;
-
   const isFirstPage = !characterData?.previous;
   const isLastPage = !characterData?.next;
-
-  console.log(planetData, isPlanetsLoading, isPlanetsLoading);
 
   useEffect(() => {
     if (isCharactersSuccess) {
@@ -91,28 +86,32 @@ function CharactersList() {
     return planetData?.find((planet) => planet.url === url);
   };
 
-  console.log(characterData, isLoading, isSuccess);
+  if (!characterData || !planetData.length) {
+    return (
+      <LoaderContainer>
+        <CircularProgress data-testid="loadingAnimation" size="md" />
+      </LoaderContainer>
+    );
+  }
 
   return (
-    <CharacterContainer>
-      <HeaderContainer>
-        <Header
-          id="characterHeader"
-          title="Characters"
-          icon={faUsers}
-          subtitle={
-            !isLoading && characterData
-              ? `Page ${currentPage} of ${Math.ceil(characterData?.count / 10)}`
-              : undefined
-          }
-          description={!isLoading ? description : undefined}
-          buttons={buttons}
-        />
-      </HeaderContainer>
+    planetData &&
+    characterData && (
+      <Container>
+        <HeaderContainer>
+          <Header
+            id="characterHeader"
+            title="Characters"
+            icon={faUsers}
+            subtitle={`Page ${currentPage} of ${Math.ceil(
+              characterData.count / 10
+            )}`}
+            description={description}
+            buttons={buttons}
+          />
+        </HeaderContainer>
 
-      {isLoading && <p>Loading...</p>}
-      {isSuccess && (
-        <CardContainer>
+        <BodyContainer>
           {characterData.results.map((character) => (
             <PreviewCard
               key={character.name}
@@ -120,15 +119,18 @@ function CharactersList() {
               content={
                 <CardContent orientation="horizontal">
                   <div>
-                    <Typography level="title-lg">{character.name}</Typography>
+                    <Typography noWrap level="title-lg">
+                      {character.name}
+                    </Typography>
                     <Typography level="body-md">
+                      <FontAwesomeIcon icon={faUser} />
+                      &nbsp;
                       {capitalizeFirstCharacter(character.gender)}
-                      <span>
-                        &nbsp; | &nbsp;
-                        <FontAwesomeIcon icon={faLocationDot} />
-                        &nbsp;
-                        {getPlanet(character.homeworld)?.name}
-                      </span>
+                    </Typography>
+                    <Typography>
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      &nbsp;
+                      {getPlanet(character.homeworld)?.name}
                     </Typography>
                   </div>
                   <Button
@@ -136,9 +138,13 @@ function CharactersList() {
                     size="md"
                     color="primary"
                     aria-label={`View ${character.name}`}
-                    sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
+                    sx={{
+                      ml: "auto",
+                      alignSelf: "center",
+                      fontWeight: 600,
+                    }}
                     onClick={() =>
-                      navigate(`/${getCharacterId(character.url)}`)
+                      navigate(`/${getId(character.url, "people")}`)
                     }
                   >
                     View Details
@@ -147,9 +153,9 @@ function CharactersList() {
               }
             />
           ))}
-        </CardContainer>
-      )}
-    </CharacterContainer>
+        </BodyContainer>
+      </Container>
+    )
   );
 }
 

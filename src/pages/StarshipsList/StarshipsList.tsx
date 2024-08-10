@@ -1,10 +1,10 @@
 import { faRocket } from "@fortawesome/free-solid-svg-icons";
 import Header from "components/Header/Header";
-import { HeaderContainer, StarshipContainer } from "./styles";
+import { HeaderContainer, Container } from "styles";
 
 function StarshipsList() {
   return (
-    <StarshipContainer>
+    <Container>
       <HeaderContainer>
         <Header
           id="characterHeader"
@@ -13,7 +13,7 @@ function StarshipsList() {
           subtitle={"0 Starships Found"}
         />
       </HeaderContainer>
-    </StarshipContainer>
+    </Container>
   );
 }
 

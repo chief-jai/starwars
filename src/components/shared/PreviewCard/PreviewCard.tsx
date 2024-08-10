@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 
 interface PreviewCardProps {
   src: string;
-  content: ReactElement;
+  content?: ReactElement;
 }
 
 function PreviewCard({ content, src }: PreviewCardProps) {

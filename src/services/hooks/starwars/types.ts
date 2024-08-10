@@ -1,7 +1,10 @@
-interface CharacterResponse {
+interface BaseResponse {
   count: number;
   next: string | null;
   previous: string | null;
+}
+
+interface CharacterResponse extends BaseResponse {
   results: Character[];
 }
 
@@ -47,4 +50,32 @@ interface CombinedPlanetResponse {
   isLoading: boolean;
 }
 
-export type { CharacterResponse, Character, Planet, CombinedPlanetResponse };
+interface FilmResponse extends BaseResponse {
+  results: Film[];
+}
+
+interface Film {
+  title: string;
+  episode_id: number;
+  opening_crawl: string;
+  director: string;
+  producer: string;
+  release_date: string;
+  characters: string[];
+  planets: string[];
+  starships: string[];
+  vehicles: string[];
+  species: string[];
+  created: string;
+  edited: string;
+  url: string;
+}
+
+export type {
+  CharacterResponse,
+  Character,
+  Planet,
+  CombinedPlanetResponse,
+  FilmResponse,
+  Film,
+};

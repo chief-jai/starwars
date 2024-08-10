@@ -1,4 +1,5 @@
 import App from "App";
+import CharacterDetail from "pages/CharacterDetail/CharacterDetail";
 import CharactersList from "pages/CharactersList/CharactersList";
 import PlanetsList from "pages/PlanetsList/PlanetsList";
 import StarshipsList from "pages/StarshipsList/StarshipsList";
@@ -14,8 +15,8 @@ const appRouter = createBrowserRouter([
         Component: CharactersList,
       },
       {
-        path: "/:id",
-        Component: () => <div>Character Details</div>,
+        path: "/:characterId",
+        Component: CharacterDetail,
       },
       {
         path: "/planets",
