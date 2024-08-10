@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Sidebar from "./Sidebar";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Sidebar", () => {
   it("should render the sidebar", () => {
@@ -23,7 +23,7 @@ describe("Sidebar", () => {
     `should render the sidebar with the %s link visible when the sidebar is open`,
     async (link) => {
       render(<Sidebar />, {
-        wrapper: BrowserRouter,
+        wrapper: MemoryRouter,
       });
 
       const sidebar = screen.getByTestId("sidebar");
@@ -40,7 +40,7 @@ describe("Sidebar", () => {
     "should render the side with the %s link hidden when the sidebar is unhovered",
     async (link) => {
       render(<Sidebar />, {
-        wrapper: BrowserRouter,
+        wrapper: MemoryRouter,
       });
 
       const sidebar = screen.getByTestId("sidebar");

@@ -13,6 +13,7 @@ const CustomSheet = styled(Sheet)<Props>`
   transition: width 0.3s ease-in-out;
   padding: 16px;
   color: white !important;
+  font-size: 18px !important;
 
   display: flex;
   flex-direction: column;

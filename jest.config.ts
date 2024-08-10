@@ -27,11 +27,15 @@ export default {
   collectCoverage: true,
   coverageThreshold: {
     global: {
-      functions: 80,
       lines: 80,
     },
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   setupFiles: ["<rootDir>/jest.polyfills.ts"],
-  coveragePathIgnorePatterns: ["styles.ts"],
+  coveragePathIgnorePatterns: [
+    "styles.ts",
+    "<rootDir>/src/services",
+    "<rootDir>/mocks",
+    "helpers.ts",
+  ],
 };

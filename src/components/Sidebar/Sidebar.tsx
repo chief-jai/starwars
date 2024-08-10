@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEarthEurope,
   faRocket,
-  faUser,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Sidebar() {
@@ -46,7 +46,7 @@ function Sidebar() {
       <Logo src="./src/assets/starwars.png" alt="Logo" />
       <NavItemsContainer $isOpen={isOpen}>
         <NavItem>
-          <FontAwesomeIcon icon={faUser} />
+          <FontAwesomeIcon icon={faUsers} />
           {isOpen && <CustomNavLink to="/">Characters</CustomNavLink>}
         </NavItem>
         <NavItem>
