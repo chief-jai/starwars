@@ -1,14 +1,21 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const AppContainer = styled.div`
+const Row = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const AppContainer = styled(Row)`
   height: 100vh;
 `;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(Column)`
   width: 100%;
   height: 100%;
 `;
@@ -18,8 +25,7 @@ const LoaderContainer = styled(Container)`
   align-items: center;
 `;
 
-const HeaderContainer = styled.div`
-  display: flex;
+const HeaderContainer = styled(Row)`
   width: 100%;
   padding: 32px 40px;
   border-bottom: 1px solid #e8eaed;
@@ -27,34 +33,26 @@ const HeaderContainer = styled.div`
   z-index: 1;
 `;
 
-const BodyContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+const BodyContainer = styled(Row)`
   justify-content: center;
   align-items: flex-start;
-  padding: 36px 12px;
+  padding: 36px 24px;
   flex-wrap: wrap;
   overflow: scroll;
   gap: 30px;
 `;
 
-const DetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const DetailsContainer = styled(Column)`
   gap: 8px;
   width: 25%;
 `;
 
-const GeneralContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const GeneralContainer = styled(Column)`
   gap: 8px;
   width: 70%;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
+const DetailRow = styled(Row)`
   justify-content: space-between;
   gap: 8px;
 
@@ -68,7 +66,24 @@ const Separator = styled.p`
   border-bottom: 1px solid rgb(232, 234, 237);
 `;
 
+const ActionsRow = styled(Row)`
+  width: 100%;
+  gap: 12px;
+`;
+
+const CharactersRow = styled(Row)`
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 100%;
+`;
+
+const CustomLink = styled(Link)`
+  color: black;
+`;
+
 export {
+  Row,
+  Column,
   AppContainer,
   Container,
   LoaderContainer,
@@ -77,5 +92,8 @@ export {
   DetailsContainer,
   GeneralContainer,
   Separator,
-  Row,
+  DetailRow,
+  ActionsRow,
+  CharactersRow,
+  CustomLink,
 };

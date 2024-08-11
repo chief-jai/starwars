@@ -23,11 +23,11 @@ import {
 import {
   BodyContainer,
   Container,
+  DetailRow,
   DetailsContainer,
   GeneralContainer,
   HeaderContainer,
   LoaderContainer,
-  Row,
   Separator,
 } from "styles";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
@@ -140,7 +140,7 @@ function CharacterDetail() {
 
               <Separator />
 
-              <Row>
+              <DetailRow>
                 <div>
                   <Typography level="title-lg">Height</Typography>
                   <Typography>{characterData.height} cm</Typography>
@@ -150,7 +150,7 @@ function CharacterDetail() {
                   <Typography level="title-lg">Mass</Typography>
                   <Typography>{characterData.mass} kg</Typography>
                 </div>
-              </Row>
+              </DetailRow>
 
               <Separator />
             </CardContent>

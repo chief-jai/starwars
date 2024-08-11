@@ -8,7 +8,7 @@ interface PreviewCardProps {
 
 function PreviewCard({ content, src }: PreviewCardProps) {
   return (
-    <Card sx={{ minHeight: "250px", width: "22%" }}>
+    <Card sx={{ minHeight: "150px", width: "18%" }}>
       <img src={src} srcSet={`${src} 2x`} style={{ aspectRatio: 1 }} />
 
       {content}
