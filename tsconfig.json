@@ -24,6 +24,6 @@
     //absolute import
     "baseUrl": "./src"
   },
-  "include": ["src", "./jest.setup.ts", "mocks/server.ts"],
+  "include": ["src", "./jest.setup.ts", "mocks"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
