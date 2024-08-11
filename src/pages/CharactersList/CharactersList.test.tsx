@@ -1,29 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import CharactersList from "./CharactersList";
 import { MemoryRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import userEvent from "@testing-library/user-event";
+import { render } from "utils/testing";
 
 const renderCharacterList = () => {
-  const queryClientOptions = {
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-    logger: {
-      log: () => null,
-      warn: () => null,
-      error: () => null,
-    },
-  };
-  const queryClient = new QueryClient(queryClientOptions);
-  render(
-    <QueryClientProvider client={queryClient}>
-      <CharactersList />
-    </QueryClientProvider>,
-    { wrapper: MemoryRouter }
-  );
+  return render(<CharactersList />, { wrapper: MemoryRouter });
 };
 
 const mockedNavigate = jest.fn();
@@ -150,13 +131,11 @@ describe("Characters List", () => {
   });
 
   it("should render the CharacterList component in Table View on clicking Table View button", async () => {
-    renderCharacterList();
+    const { user } = renderCharacterList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
-
-    const user = userEvent.setup();
 
     const tableView = screen.getByRole("button", { name: /table view/i });
 
@@ -167,13 +146,11 @@ describe("Characters List", () => {
   });
 
   it("should render the CharacterList component in List View on clicking Table View button and switching back", async () => {
-    renderCharacterList();
+    const { user } = renderCharacterList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
-
-    const user = userEvent.setup();
 
     const tableView = screen.getByRole("button", { name: /table view/i });
 
@@ -188,13 +165,11 @@ describe("Characters List", () => {
   });
 
   it("should trigger navigation to character details page on clicking view button", async () => {
-    renderCharacterList();
+    const { user } = renderCharacterList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
-
-    const user = userEvent.setup();
 
     const viewButton = screen.getByRole("button", {
       name: /view luke skywalker/i,

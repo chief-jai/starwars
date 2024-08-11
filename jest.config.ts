@@ -35,7 +35,7 @@ export default {
   coveragePathIgnorePatterns: [
     "styles.ts",
     "<rootDir>/src/services",
+    "<rootDir>/src/utils",
     "<rootDir>/mocks",
-    "helpers.ts",
   ],
 };

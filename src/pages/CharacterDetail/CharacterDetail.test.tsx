@@ -1,29 +1,10 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import CharacterDetail from "./CharacterDetail";
 import { MemoryRouter } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
+import { render } from "utils/testing";
 
 const renderCharacterDetail = () => {
-  const queryClientOptions = {
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-    logger: {
-      log: () => null,
-      warn: () => null,
-      error: () => null,
-    },
-  };
-  const queryClient = new QueryClient(queryClientOptions);
-  render(
-    <QueryClientProvider client={queryClient}>
-      <CharacterDetail />
-    </QueryClientProvider>,
-    { wrapper: MemoryRouter }
-  );
+  return render(<CharacterDetail />, { wrapper: MemoryRouter });
 };
 
 const mockedNavigate = jest.fn();
@@ -71,7 +52,7 @@ describe("Character Detail", () => {
   });
 
   it("should trigger navigate when back button is clicked", async () => {
-    renderCharacterDetail();
+    const { user } = renderCharacterDetail();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
@@ -80,8 +61,6 @@ describe("Character Detail", () => {
     const backButton = screen.getByRole("button", {
       name: /back/i,
     });
-
-    const user = userEvent.setup();
 
     await user.click(backButton);
 

@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Sidebar from "./Sidebar";
 import { MemoryRouter } from "react-router-dom";
+import { render } from "utils/testing";
 
 describe("Sidebar", () => {
   it("should render the sidebar", () => {
@@ -22,13 +23,11 @@ describe("Sidebar", () => {
   it.each(["characters", "planets", "starships"])(
     `should render the sidebar with the %s link visible when the sidebar is open`,
     async (link) => {
-      render(<Sidebar />, {
+      const { user } = render(<Sidebar />, {
         wrapper: MemoryRouter,
       });
 
       const sidebar = screen.getByTestId("sidebar");
-
-      const user = userEvent.setup();
 
       await user.hover(sidebar);
 
