@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEarthEurope,
+  faFilm,
   faRocket,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -48,6 +49,10 @@ function Sidebar() {
         <NavItem>
           <FontAwesomeIcon icon={faUsers} />
           {isOpen && <CustomNavLink to="/">Characters</CustomNavLink>}
+        </NavItem>
+        <NavItem>
+          <FontAwesomeIcon icon={faFilm} />
+          {isOpen && <CustomNavLink to="/films">Films</CustomNavLink>}
         </NavItem>
         <NavItem>
           <FontAwesomeIcon icon={faEarthEurope} />

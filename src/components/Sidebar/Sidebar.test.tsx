@@ -35,7 +35,7 @@ describe("Sidebar", () => {
     }
   );
 
-  it.each(["characters", "planets", "starships"])(
+  it.each(["characters", "films", "planets", "starships"])(
     "should render the side with the %s link hidden when the sidebar is unhovered",
     async (link) => {
       render(<Sidebar />, {

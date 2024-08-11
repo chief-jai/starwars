@@ -1,4 +1,9 @@
-import { CharacterResponse, FilmResponse, Planet } from "./types";
+import {
+  CharacterResponse,
+  FilmResponse,
+  PlanetResponse,
+  StarshipResponse,
+} from "./types";
 
 const charactersResponse: CharacterResponse = {
   count: 1,
@@ -37,38 +42,45 @@ const charactersResponse: CharacterResponse = {
   ],
 };
 
-const planet: Planet = {
-  name: "Tatooine",
-  rotation_period: "23",
-  orbital_period: "304",
-  diameter: "10465",
-  climate: "arid",
-  gravity: "1 standard",
-  terrain: "desert",
-  surface_water: "1",
-  population: "200000",
-  residents: [
-    "https://swapi.dev/api/people/1/",
-    "https://swapi.dev/api/people/2/",
-    "https://swapi.dev/api/people/4/",
-    "https://swapi.dev/api/people/6/",
-    "https://swapi.dev/api/people/7/",
-    "https://swapi.dev/api/people/8/",
-    "https://swapi.dev/api/people/9/",
-    "https://swapi.dev/api/people/11/",
-    "https://swapi.dev/api/people/43/",
-    "https://swapi.dev/api/people/62/",
+const planetResponse: PlanetResponse = {
+  count: 1,
+  next: null,
+  previous: null,
+  results: [
+    {
+      name: "Tatooine",
+      rotation_period: "23",
+      orbital_period: "304",
+      diameter: "10465",
+      climate: "arid",
+      gravity: "1 standard",
+      terrain: "desert",
+      surface_water: "1",
+      population: "200000",
+      residents: [
+        "https://swapi.dev/api/people/1/",
+        "https://swapi.dev/api/people/2/",
+        "https://swapi.dev/api/people/4/",
+        "https://swapi.dev/api/people/6/",
+        "https://swapi.dev/api/people/7/",
+        "https://swapi.dev/api/people/8/",
+        "https://swapi.dev/api/people/9/",
+        "https://swapi.dev/api/people/11/",
+        "https://swapi.dev/api/people/43/",
+        "https://swapi.dev/api/people/62/",
+      ],
+      films: [
+        "https://swapi.dev/api/films/1/",
+        "https://swapi.dev/api/films/3/",
+        "https://swapi.dev/api/films/4/",
+        "https://swapi.dev/api/films/5/",
+        "https://swapi.dev/api/films/6/",
+      ],
+      created: "2014-12-09T13:50:49.641000Z",
+      edited: "2014-12-20T20:58:18.411000Z",
+      url: "https://swapi.dev/api/planets/1/",
+    },
   ],
-  films: [
-    "https://swapi.dev/api/films/1/",
-    "https://swapi.dev/api/films/3/",
-    "https://swapi.dev/api/films/4/",
-    "https://swapi.dev/api/films/5/",
-    "https://swapi.dev/api/films/6/",
-  ],
-  created: "2014-12-09T13:50:49.641000Z",
-  edited: "2014-12-20T20:58:18.411000Z",
-  url: "https://swapi.dev/api/planets/1/",
 };
 
 const filmsResponse: FilmResponse = {
@@ -84,26 +96,7 @@ const filmsResponse: FilmResponse = {
       director: "George Lucas",
       producer: "Gary Kurtz, Rick McCallum",
       release_date: "1977-05-25",
-      characters: [
-        "https://swapi.dev/api/people/1/",
-        "https://swapi.dev/api/people/2/",
-        "https://swapi.dev/api/people/3/",
-        "https://swapi.dev/api/people/4/",
-        "https://swapi.dev/api/people/5/",
-        "https://swapi.dev/api/people/6/",
-        "https://swapi.dev/api/people/7/",
-        "https://swapi.dev/api/people/8/",
-        "https://swapi.dev/api/people/9/",
-        "https://swapi.dev/api/people/10/",
-        "https://swapi.dev/api/people/12/",
-        "https://swapi.dev/api/people/13/",
-        "https://swapi.dev/api/people/14/",
-        "https://swapi.dev/api/people/15/",
-        "https://swapi.dev/api/people/16/",
-        "https://swapi.dev/api/people/18/",
-        "https://swapi.dev/api/people/19/",
-        "https://swapi.dev/api/people/81/",
-      ],
+      characters: ["https://swapi.dev/api/people/1/"],
       planets: [
         "https://swapi.dev/api/planets/1/",
         "https://swapi.dev/api/planets/2/",
@@ -139,4 +132,36 @@ const filmsResponse: FilmResponse = {
   ],
 };
 
-export { charactersResponse, planet, filmsResponse };
+const starshipsResponse: StarshipResponse = {
+  count: 1,
+  next: null,
+  previous: null,
+  results: [
+    {
+      name: "CR90 corvette",
+      model: "CR90 corvette",
+      manufacturer: "Corellian Engineering Corporation",
+      cost_in_credits: "3500000",
+      length: "150",
+      max_atmosphering_speed: "950",
+      crew: "30-165",
+      passengers: "600",
+      cargo_capacity: "3000000",
+      consumables: "1 year",
+      hyperdrive_rating: "2.0",
+      MGLT: "60",
+      starship_class: "corvette",
+      pilots: [],
+      films: [
+        "https://swapi.dev/api/films/1/",
+        "https://swapi.dev/api/films/3/",
+        "https://swapi.dev/api/films/6/",
+      ],
+      created: "2014-12-10T14:20:33.369000Z",
+      edited: "2014-12-20T21:23:49.867000Z",
+      url: "https://swapi.dev/api/starships/2/",
+    },
+  ],
+};
+
+export { charactersResponse, planetResponse, filmsResponse, starshipsResponse };

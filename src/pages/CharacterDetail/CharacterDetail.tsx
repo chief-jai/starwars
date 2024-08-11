@@ -23,6 +23,7 @@ import {
 import {
   BodyContainer,
   Container,
+  CustomContainer,
   DetailRow,
   DetailsContainer,
   GeneralContainer,
@@ -31,7 +32,6 @@ import {
   Separator,
 } from "styles";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
-import { CustomContainer } from "./styles";
 import CircularProgress from "@mui/joy/CircularProgress";
 
 function CharacterDetail() {
@@ -60,13 +60,13 @@ function CharacterDetail() {
     return (
       <CardContent orientation="horizontal">
         <div>
-          <Typography level="title-lg">{film.title}</Typography>
-          <Typography level="body-md">
+          <Typography level="title-md">{film.title}</Typography>
+          <Typography level="body-sm">
             <FontAwesomeIcon icon={faUser} />
             &nbsp;
             {capitalizeFirstCharacter(film.director)}
           </Typography>
-          <Typography>
+          <Typography level="body-sm">
             <FontAwesomeIcon icon={faCalendar} />
             &nbsp;
             {film.release_date}
@@ -179,6 +179,7 @@ function CharacterDetail() {
                 {characterData.films.map((film) => {
                   return (
                     <PreviewCard
+                      key={film}
                       src={getFilmImageUrl(film)}
                       content={getFilmContent(film)}
                     />

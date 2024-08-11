@@ -8,6 +8,12 @@ interface CharacterResponse extends BaseResponse {
   results: Character[];
 }
 
+interface CombinedCharacterResponse {
+  data: Character[];
+  isSuccess: boolean;
+  isLoading: boolean;
+}
+
 interface Character {
   name: string;
   height: string;
@@ -27,6 +33,16 @@ interface Character {
   url: string;
 }
 
+interface PlanetResponse extends BaseResponse {
+  results: Planet[];
+}
+
+interface CombinedPlanetResponse {
+  data: Planet[];
+  isSuccess: boolean;
+  isLoading: boolean;
+}
+
 interface Planet {
   name: string;
   rotation_period: string;
@@ -42,12 +58,6 @@ interface Planet {
   created: string;
   edited: string;
   url: string;
-}
-
-interface CombinedPlanetResponse {
-  data: Planet[];
-  isSuccess: boolean;
-  isLoading: boolean;
 }
 
 interface FilmResponse extends BaseResponse {
@@ -71,11 +81,40 @@ interface Film {
   url: string;
 }
 
+interface StarshipResponse extends BaseResponse {
+  results: Starship[];
+}
+
+interface Starship {
+  name: string;
+  model: string;
+  manufacturer: string;
+  cost_in_credits: string;
+  length: string;
+  max_atmosphering_speed: string;
+  crew: string;
+  passengers: string;
+  cargo_capacity: string;
+  consumables: string;
+  hyperdrive_rating: string;
+  MGLT: string;
+  starship_class: string;
+  pilots: string[];
+  films: string[];
+  created: string;
+  edited: string;
+  url: string;
+}
+
 export type {
   CharacterResponse,
+  CombinedCharacterResponse,
   Character,
-  Planet,
+  PlanetResponse,
   CombinedPlanetResponse,
+  Planet,
   FilmResponse,
   Film,
+  StarshipResponse,
+  Starship,
 };

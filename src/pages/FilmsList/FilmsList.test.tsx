@@ -1,10 +1,10 @@
 import { screen, waitFor, within } from "@testing-library/react";
-import CharactersList from "./CharactersList";
 import { MemoryRouter } from "react-router-dom";
 import { render } from "utils/testing";
+import FilmsList from "./FilmsList";
 
-const renderCharacterList = () => {
-  return render(<CharactersList />, { wrapper: MemoryRouter });
+const renderFilmsList = () => {
+  return render(<FilmsList />, { wrapper: MemoryRouter });
 };
 
 const mockedNavigate = jest.fn();
@@ -13,9 +13,9 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigate,
 }));
 
-describe("Characters List", () => {
-  it("should render the CharactersList component with correct title in header", async () => {
-    renderCharacterList();
+describe("Films List", () => {
+  it("should render the FilmsList component with correct title in header", async () => {
+    renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
@@ -23,78 +23,50 @@ describe("Characters List", () => {
 
     expect(
       await screen.getByRole("heading", {
-        name: /characters/i,
+        name: /films/i,
         level: 1,
       })
     ).toBeInTheDocument();
   });
 
-  it("should render the CharactersList component with loader", () => {
-    renderCharacterList();
+  it("should render the FilmsList component with loader", () => {
+    renderFilmsList();
 
     expect(screen.getByTestId("loadingAnimation")).toBeInTheDocument();
   });
 
-  it("should render the CharactersList component with correct subtitle in header", async () => {
-    renderCharacterList();
+  it("should render the FilmsList component with correct subtitle in header", async () => {
+    renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
-    expect(await screen.findByText(/page 1 of 1/i)).toBeInTheDocument();
+    expect(await screen.findByText(/page 1/i)).toBeInTheDocument();
+
+    expect(screen.getByText(/showing 1 - 1 of 1 films/i)).toBeInTheDocument();
+  });
+
+  it("should render the FilmsList component with correct film data", async () => {
+    renderFilmsList();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/a new hope/i)).toBeInTheDocument();
+
+    expect(screen.getByText(/george lucas/i)).toBeInTheDocument();
+
+    expect(screen.getByText("1977-05-25")).toBeInTheDocument();
 
     expect(
-      screen.getByText(/showing 1 - 1 of 1 characters/i)
+      screen.getByRole("button", { name: /view a new hope/i })
     ).toBeInTheDocument();
   });
 
-  it("should render the CharactersList component with correct character data", async () => {
-    renderCharacterList();
-
-    await waitFor(() => {
-      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
-    });
-
-    expect(screen.getByText(/luke skywalker/i)).toBeInTheDocument();
-
-    expect(screen.getByText(/male/i)).toBeInTheDocument();
-
-    expect(screen.getByText(/tatooine/i)).toBeInTheDocument();
-
-    expect(
-      screen.getByRole("button", { name: /view luke skywalker/i })
-    ).toBeInTheDocument();
-  });
-
-  it("should render the CharactersList component with appropriate buttons", async () => {
-    renderCharacterList();
-
-    await waitFor(() => {
-      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
-    });
-
-    const previousButton = screen.getByRole("button", { name: /previous/i });
-    const nextButton = screen.getByRole("button", { name: /next/i });
-
-    expect(previousButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
-
-    const arrowLeftIcon = within(previousButton).getByRole("img", {
-      hidden: true,
-    });
-
-    const arrowRightIcon = within(nextButton).getByRole("img", {
-      hidden: true,
-    });
-
-    expect(arrowLeftIcon).toHaveAttribute("data-icon", "arrow-left");
-
-    expect(arrowRightIcon).toHaveAttribute("data-icon", "arrow-right");
-  });
-
-  it("should render the CharactersList component with appropriate view buttons", async () => {
-    renderCharacterList();
+  it("should render the FilmsList component with appropriate view buttons", async () => {
+    renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
@@ -120,18 +92,18 @@ describe("Characters List", () => {
   });
 
   it("should render the CharacterList component in List View by default", async () => {
-    renderCharacterList();
+    renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
-    expect(screen.getByTestId("characters-list")).toBeInTheDocument();
+    expect(screen.getByTestId("films-list")).toBeInTheDocument();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
 
   it("should render the CharacterList component in Table View on clicking Table View button", async () => {
-    const { user } = renderCharacterList();
+    const { user } = renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
@@ -142,11 +114,11 @@ describe("Characters List", () => {
     await user.click(tableView);
 
     expect(screen.getByRole("table")).toBeInTheDocument();
-    expect(screen.queryByTestId("characters-list")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("films-list")).not.toBeInTheDocument();
   });
 
-  it("should render the CharacterList component in List View on clicking Table View button and switching back", async () => {
-    const { user } = renderCharacterList();
+  it("should render the FilmsList component in List View on clicking Table View button and switching back", async () => {
+    const { user } = renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
@@ -160,23 +132,23 @@ describe("Characters List", () => {
 
     await user.click(listView);
 
-    expect(screen.getByTestId("characters-list")).toBeInTheDocument();
+    expect(screen.getByTestId("films-list")).toBeInTheDocument();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
 
-  it("should trigger navigation to character details page on clicking view button", async () => {
-    const { user } = renderCharacterList();
+  it("should trigger navigation to film details page on clicking view button", async () => {
+    const { user } = renderFilmsList();
 
     await waitFor(() => {
       expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
     });
 
     const viewButton = screen.getByRole("button", {
-      name: /view luke skywalker/i,
+      name: /view a new hope/i,
     });
 
     await user.click(viewButton);
 
-    expect(mockedNavigate).toHaveBeenCalledWith("/1");
+    expect(mockedNavigate).toHaveBeenCalledWith("/films/1");
   });
 });

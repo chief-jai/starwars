@@ -47,6 +47,11 @@ const DetailsContainer = styled(Column)`
   width: 25%;
 `;
 
+const CustomContainer = styled(BodyContainer)`
+  padding: 32px 40px;
+  width: 100%;
+`;
+
 const GeneralContainer = styled(Column)`
   gap: 8px;
   width: 70%;
@@ -90,6 +95,7 @@ export {
   HeaderContainer,
   BodyContainer,
   DetailsContainer,
+  CustomContainer,
   GeneralContainer,
   Separator,
   DetailRow,

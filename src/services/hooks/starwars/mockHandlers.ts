@@ -1,5 +1,10 @@
 import { http, HttpResponse } from "msw";
-import { charactersResponse, filmsResponse, planet } from "./testData";
+import {
+  charactersResponse,
+  filmsResponse,
+  planetResponse,
+  starshipsResponse,
+} from "./testData";
 
 const getCharacters = http.get("https://swapi.dev/api/people/", () => {
   return HttpResponse.json({
@@ -13,9 +18,15 @@ const getCharactersById = http.get("https://swapi.dev/api/people/:id", () => {
   });
 });
 
-const getPlanet = http.get("https://swapi.dev/api/planets/:id", () => {
+const getPlanets = http.get("https://swapi.dev/api/planets/", () => {
   return HttpResponse.json({
-    ...planet,
+    ...planetResponse,
+  });
+});
+
+const getPlanetById = http.get("https://swapi.dev/api/planets/:id", () => {
+  return HttpResponse.json({
+    ...planetResponse.results[0],
   });
 });
 
@@ -25,9 +36,24 @@ const getFilms = http.get("https://swapi.dev/api/films/", () => {
   });
 });
 
+const getFilmsById = http.get("https://swapi.dev/api/films/:id", () => {
+  return HttpResponse.json({
+    ...filmsResponse.results[0],
+  });
+});
+
+const getStarships = http.get("https://swapi.dev/api/starships/", () => {
+  return HttpResponse.json({
+    ...starshipsResponse,
+  });
+});
+
 export const starwarsHandlers = [
   getCharacters,
   getCharactersById,
-  getPlanet,
+  getPlanets,
+  getPlanetById,
   getFilms,
+  getFilmsById,
+  getStarships,
 ];

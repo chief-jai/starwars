@@ -2,7 +2,7 @@ import Header from "components/Header/Header";
 import { useEffect, useState } from "react";
 import {
   useGetCharacters,
-  useGetPlanets,
+  useGetPlanetsInParallel,
 } from "services/hooks/starwars/starwars";
 import {
   ActionsRow,
@@ -43,7 +43,7 @@ function CharactersList() {
   const [planetUrls, setPlanetUrls] = useState<string[]>([]);
   const { data: characterData, isSuccess: isCharactersSuccess } =
     useGetCharacters(currentPage.toString());
-  const { data: planetData } = useGetPlanets(planetUrls);
+  const { data: planetData } = useGetPlanetsInParallel(planetUrls);
 
   const navigate = useNavigate();
 
