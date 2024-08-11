@@ -3,11 +3,11 @@ function getId(url: string, delimiter: string) {
 }
 
 function getCharacterImageUrl(url: string) {
-  return `./src/assets/characters/${getId(url, "people")}.jpg`;
+  return `./assets/characters/${getId(url, "people")}.jpg`;
 }
 
 function getFilmImageUrl(url: string) {
-  return `./src/assets/films/${getId(url, "films")}.jpg`;
+  return `./assets/films/${getId(url, "films")}.jpg`;
 }
 
 const capitalizeFirstCharacter = (string?: string): string => {

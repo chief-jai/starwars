@@ -44,7 +44,7 @@ function Sidebar() {
 
   return (
     <CustomSheet data-testid="sidebar" $isOpen={isOpen} ref={sidebarRef}>
-      <Logo src="./src/assets/starwars.png" alt="Logo" />
+      <Logo src="./assets/starwars.png" alt="Logo" />
       <NavItemsContainer $isOpen={isOpen}>
         <NavItem>
           <FontAwesomeIcon icon={faUsers} />
