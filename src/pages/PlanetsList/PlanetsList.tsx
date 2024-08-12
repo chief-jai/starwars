@@ -2,28 +2,60 @@ import {
   faArrowLeft,
   faArrowRight,
   faEarthEurope,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@mui/joy/Button";
 import CircularProgress from "@mui/joy/CircularProgress";
+import Input from "@mui/joy/Input";
 import Table from "@mui/joy/Table";
 import Header from "components/Header/Header";
-import { useState } from "react";
+import InfoMessage from "components/shared/InfoMessage/InfoMessage";
+import { ChangeEvent, useRef, useState } from "react";
 import { useGetPlanets } from "services/hooks/starwars/starwars";
 import {
   HeaderContainer,
   Container,
-  LoaderContainer,
+  LoaderAndErrorContainer,
   BodyContainer,
+  ActionsRow,
 } from "styles";
 import { capitalizeFirstCharacter } from "utils/helpers";
 
+/**
+ * The PlanetsList component displays a list of planets in a table view
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <PlanetsList />
+ * ```
+ *
+ * @return A React component that represents a list of planets
+ */
 function PlanetsList() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: planetsData } = useGetPlanets(currentPage.toString());
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
+
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const { data: planetsData, isError: isPlanetsError } = useGetPlanets(
+    currentPage.toString(),
+    debouncedSearchValue.trim()
+  );
 
   const isFirstPage = !planetsData?.previous;
   const isLastPage = !planetsData?.next;
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setDebouncedSearchValue(event.target.value);
+      setCurrentPage(1);
+    }, 500);
+  };
 
   const buttons = [
     <Button
@@ -52,13 +84,27 @@ function PlanetsList() {
     planetsData && planetsData.count > 10
       ? currentPage * 10
       : planetsData?.count;
-  const description = `Showing ${startIndex} - ${endIndex} of ${planetsData?.count} planets`;
+  const description = planetsData?.count
+    ? `Showing ${startIndex} - ${endIndex} of ${planetsData.count} planets`
+    : undefined;
+  const subtitle = planetsData?.count
+    ? `Page ${currentPage} of ${Math.ceil(planetsData.count / 10)}`
+    : undefined;
 
-  if (!planetsData || !planetsData.results.length) {
+  if (isPlanetsError) {
     return (
-      <LoaderContainer>
+      <InfoMessage
+        id="planetsListError"
+        secondaryMessage="Please try again later. Thank you for your patience."
+      />
+    );
+  }
+
+  if (!planetsData) {
+    return (
+      <LoaderAndErrorContainer>
         <CircularProgress data-testid="loadingAnimation" size="md" />
-      </LoaderContainer>
+      </LoaderAndErrorContainer>
     );
   }
 
@@ -70,41 +116,60 @@ function PlanetsList() {
             id="planetHeader"
             title="Planets"
             icon={faEarthEurope}
-            subtitle={`Page ${currentPage} of ${Math.ceil(
-              planetsData.count / 10
-            )}`}
+            subtitle={subtitle}
             description={description}
             buttons={buttons}
           />
         </HeaderContainer>
 
         <BodyContainer>
-          <Table size="lg" borderAxis="both">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Terrain</th>
-                <th>Population</th>
-                <th>Climate</th>
-                <th>Gravity</th>
-              </tr>
-            </thead>
-            <tbody>
-              {planetsData.results.map((planet) => (
-                <tr key={planet.name}>
-                  <td>{planet.name}</td>
-                  <td>{capitalizeFirstCharacter(planet.terrain)}</td>
-                  <td>
-                    {!isNaN(parseInt(planet.population))
-                      ? parseInt(planet.population).toLocaleString()
-                      : "N/A"}
-                  </td>
-                  <td>{capitalizeFirstCharacter(planet.climate)}</td>
-                  <td>{capitalizeFirstCharacter(planet.gravity)}</td>
+          <ActionsRow>
+            <Input
+              placeholder="Search by name..."
+              value={searchValue}
+              onChange={handleChange}
+              startDecorator={<FontAwesomeIcon icon={faSearch} />}
+              sx={{ width: "320px" }}
+            />
+          </ActionsRow>
+
+          {!planetsData.results.length && (
+            <InfoMessage
+              id="planetsListEmpty"
+              icon={faSearch}
+              primaryMessage="No planets found"
+              secondaryMessage="Please refine your query"
+            />
+          )}
+
+          {!!planetsData.results.length && (
+            <Table size="lg" borderAxis="both">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Terrain</th>
+                  <th>Population</th>
+                  <th>Climate</th>
+                  <th>Gravity</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {planetsData.results.map((planet) => (
+                  <tr key={planet.name}>
+                    <td>{planet.name}</td>
+                    <td>{capitalizeFirstCharacter(planet.terrain)}</td>
+                    <td>
+                      {!isNaN(parseInt(planet.population))
+                        ? parseInt(planet.population).toLocaleString()
+                        : "N/A"}
+                    </td>
+                    <td>{capitalizeFirstCharacter(planet.climate)}</td>
+                    <td>{capitalizeFirstCharacter(planet.gravity)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </BodyContainer>
       </Container>
     )

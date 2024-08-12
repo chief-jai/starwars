@@ -91,4 +91,36 @@ test.describe("Films List Page", () => {
       })
     ).toBeVisible();
   });
+
+  test("render films List page with appropriate search input", async ({
+    page,
+  }) => {
+    await page.goto("/films");
+
+    await expect(page.getByPlaceholder("search by name...")).toBeVisible();
+  });
+
+  test("render films list page with filtered data", async ({ page }) => {
+    await page.goto("/films");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("new");
+
+    await expect(page.getByText("A New Hope")).toBeVisible();
+
+    await expect(page.getByText("Return of the Jedi")).toBeHidden();
+  });
+
+  test("render films list page with no results found", async ({ page }) => {
+    await page.goto("/films");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("random");
+
+    await expect(page.getByText("No films found")).toBeVisible();
+
+    await expect(page.getByText("Please refine your query")).toBeVisible();
+  });
 });

@@ -20,13 +20,28 @@ import {
   StarshipResponse,
 } from "./types";
 
-const useGetCharacters = (page: string): UseQueryResult<CharacterResponse> => {
+/**
+ * Fetches characters from the Star Wars API
+ *
+ * @param {string} page
+ * @return {*}  {UseQueryResult<CharacterResponse>}
+ */
+const useGetCharacters = (
+  page: string,
+  search: string
+): UseQueryResult<CharacterResponse> => {
   return useQuery({
-    queryKey: ["characters", page],
-    queryFn: () => getCharacters(page),
+    queryKey: ["characters", page, search],
+    queryFn: () => getCharacters(page, search),
   });
 };
 
+/**
+ * Fetches characters in parallel from the Star Wars API
+ *
+ * @param {string[]} characterIds
+ * @return {*}  {CombinedCharacterResponse}
+ */
 const useGetCharactersInParallel = (
   characterIds: string[]
 ): CombinedCharacterResponse => {
@@ -42,11 +57,19 @@ const useGetCharactersInParallel = (
           : [],
         isSuccess: results.every((result) => result.isSuccess),
         isLoading: results.some((result) => result.isLoading),
+        isError: results.some((result) => result.isError),
       };
     },
   });
 };
 
+/**
+ * Fetches a character by ID from the Star Wars API
+ *
+ * @param {string} characterId
+ * @param {boolean} enabled
+ * @return {*}  {UseQueryResult<Character>}
+ */
 const useGetCharacterById = (
   characterId: string,
   enabled: boolean
@@ -58,13 +81,28 @@ const useGetCharacterById = (
   });
 };
 
-const useGetPlanets = (page: string): UseQueryResult<PlanetResponse> => {
+/**
+ * Fetches planets from the Star Wars API
+ *
+ * @param {string} page
+ * @return {*}  {UseQueryResult<PlanetResponse>}
+ */
+const useGetPlanets = (
+  page: string,
+  search: string
+): UseQueryResult<PlanetResponse> => {
   return useQuery({
-    queryKey: ["planets", page],
-    queryFn: () => getPlanets(page),
+    queryKey: ["planets", page, search],
+    queryFn: () => getPlanets(page, search),
   });
 };
 
+/**
+ * Fetches planets in parallel from the Star Wars API
+ *
+ * @param {string[]} planetIds
+ * @return {*}  {CombinedPlanetResponse}
+ */
 const useGetPlanetsInParallel = (
   planetIds: string[]
 ): CombinedPlanetResponse => {
@@ -80,11 +118,20 @@ const useGetPlanetsInParallel = (
           : [],
         isSuccess: results.every((result) => result.isSuccess),
         isLoading: results.some((result) => result.isLoading),
+        isFetching: results.some((result) => result.isFetching),
+        isError: results.some((result) => result.isError),
       };
     },
   });
 };
 
+/**
+ * Fetches a planet by ID from the Star Wars API
+ *
+ * @param {string} planetId
+ * @param {boolean} enabled
+ * @return {*}  {UseQueryResult<Planet>}
+ */
 const useGetPlanetById = (
   planetId: string,
   enabled: boolean
@@ -96,6 +143,11 @@ const useGetPlanetById = (
   });
 };
 
+/**
+ * Fetches films from the Star Wars API
+ *
+ * @return {*}  {UseQueryResult<FilmResponse>}
+ */
 const useGetFilms = (): UseQueryResult<FilmResponse> => {
   return useQuery({
     queryKey: ["films"],
@@ -103,6 +155,13 @@ const useGetFilms = (): UseQueryResult<FilmResponse> => {
   });
 };
 
+/**
+ * Fetches a film by ID from the Star Wars API
+ *
+ * @param {string} filmId
+ * @param {boolean} enabled
+ * @return {*}  {UseQueryResult<Film>}
+ */
 const useGetFilmById = (
   filmId: string,
   enabled: boolean
@@ -114,10 +173,19 @@ const useGetFilmById = (
   });
 };
 
-const useGetStarships = (page: string): UseQueryResult<StarshipResponse> => {
+/**
+ * Fetches starships from the Star Wars API
+ *
+ * @param {string} page
+ * @return {*}  {UseQueryResult<StarshipResponse>}
+ */
+const useGetStarships = (
+  page: string,
+  search: string
+): UseQueryResult<StarshipResponse> => {
   return useQuery({
-    queryKey: ["starships", page],
-    queryFn: () => getStarships(page),
+    queryKey: ["starships", page, search],
+    queryFn: () => getStarships(page, search),
   });
 };
 

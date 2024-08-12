@@ -28,27 +28,37 @@ import {
   DetailsContainer,
   GeneralContainer,
   HeaderContainer,
-  LoaderContainer,
+  LoaderAndErrorContainer,
   Separator,
 } from "styles";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
 import CircularProgress from "@mui/joy/CircularProgress";
+import InfoMessage from "components/shared/InfoMessage/InfoMessage";
 
+/**
+ * The CharacterDetail component displays the details of a character
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <CharacterDetail />
+ * ```
+ *
+ * @return A React component that represents the details of a character
+ */
 function CharacterDetail() {
   const { characterId } = useParams();
   const navigate = useNavigate();
 
-  const { data: characterData } = useGetCharacterById(
-    characterId || "",
-    !!characterId
-  );
+  const { data: characterData, isError: isCharacterError } =
+    useGetCharacterById(characterId || "", !!characterId);
 
-  const { data: planetData } = useGetPlanetById(
+  const { data: planetData, isError: isPlanetError } = useGetPlanetById(
     characterData?.homeworld || "",
     !!characterData?.homeworld
   );
 
-  const { data: filmData } = useGetFilms();
+  const { data: filmData, isError: isFilmError } = useGetFilms();
 
   const getFilmContent = (filmUrl: string) => {
     const film = filmData?.results.find((filmData) => filmData.url === filmUrl);
@@ -76,11 +86,22 @@ function CharacterDetail() {
     );
   };
 
+  console.log(isCharacterError, isPlanetError, isFilmError);
+
+  if (isCharacterError || isPlanetError || isFilmError) {
+    return (
+      <InfoMessage
+        id="characterDetailError"
+        secondaryMessage="Please try again later. Thank you for your patience."
+      />
+    );
+  }
+
   if (!characterData || !planetData || !filmData) {
     return (
-      <LoaderContainer>
+      <LoaderAndErrorContainer>
         <CircularProgress data-testid="loadingAnimation" size="md" />
-      </LoaderContainer>
+      </LoaderAndErrorContainer>
     );
   }
 

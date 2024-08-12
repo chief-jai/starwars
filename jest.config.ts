@@ -18,8 +18,9 @@ export default {
     ],
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  testPathIgnorePatterns: ["/node_modules/", "/tests/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  modulePaths: ["src", "test"],
+  modulePaths: ["src"],
   moduleNameMapper: {
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
     "^.+\\.svg$": "jest-transformer-svg",
@@ -37,5 +38,6 @@ export default {
     "<rootDir>/src/services",
     "<rootDir>/src/utils",
     "<rootDir>/mocks",
+    "<rootDir>/tests",
   ],
 };

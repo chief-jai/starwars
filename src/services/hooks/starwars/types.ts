@@ -12,6 +12,7 @@ interface CombinedCharacterResponse {
   data: Character[];
   isSuccess: boolean;
   isLoading: boolean;
+  isError: boolean;
 }
 
 interface Character {
@@ -41,6 +42,8 @@ interface CombinedPlanetResponse {
   data: Planet[];
   isSuccess: boolean;
   isLoading: boolean;
+  isFetching: boolean;
+  isError: boolean;
 }
 
 interface Planet {

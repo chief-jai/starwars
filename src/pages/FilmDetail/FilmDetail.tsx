@@ -11,6 +11,7 @@ import CardContent from "@mui/joy/CardContent";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Typography from "@mui/joy/Typography";
 import Header from "components/Header/Header";
+import InfoMessage from "components/shared/InfoMessage/InfoMessage";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,7 +26,7 @@ import {
   DetailsContainer,
   GeneralContainer,
   HeaderContainer,
-  LoaderContainer,
+  LoaderAndErrorContainer,
   Separator,
 } from "styles";
 import {
@@ -34,16 +35,29 @@ import {
   getId,
 } from "utils/helpers";
 
+/**
+ * The FilmDetail component displays the details of a film with its characters
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <FilmDetail />
+ * ```
+ *
+ * @return A React component that represents the details of a film
+ */
 function FilmDetail() {
   const { filmId } = useParams();
   const navigate = useNavigate();
   const [characterUrls, setCharacterUrls] = useState<string[]>([]);
 
-  const { data: filmData, isSuccess: isFilmsSuccess } = useGetFilmById(
-    filmId || "",
-    !!filmId
-  );
-  const { data: characterData } = useGetCharactersInParallel(characterUrls);
+  const {
+    data: filmData,
+    isSuccess: isFilmsSuccess,
+    isError: isFilmsError,
+  } = useGetFilmById(filmId || "", !!filmId);
+  const { data: characterData, isError: isCharactersError } =
+    useGetCharactersInParallel(characterUrls);
 
   useEffect(() => {
     if (isFilmsSuccess) {
@@ -57,11 +71,20 @@ function FilmDetail() {
     }
   }, [isFilmsSuccess, filmData]);
 
+  if (isCharactersError || isFilmsError) {
+    return (
+      <InfoMessage
+        id="filmDetailError"
+        secondaryMessage="Please try again later. Thank you for your patience."
+      />
+    );
+  }
+
   if (!filmData || !characterData.length) {
     return (
-      <LoaderContainer>
+      <LoaderAndErrorContainer>
         <CircularProgress data-testid="loadingAnimation" size="md" />
-      </LoaderContainer>
+      </LoaderAndErrorContainer>
     );
   }
 

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -20,7 +21,7 @@ const Container = styled(Column)`
   height: 100%;
 `;
 
-const LoaderContainer = styled(Container)`
+const LoaderAndErrorContainer = styled(Container)`
   justify-content: center;
   align-items: center;
 `;
@@ -73,7 +74,8 @@ const Separator = styled.p`
 
 const ActionsRow = styled(Row)`
   width: 100%;
-  gap: 12px;
+  gap: 24px;
+  justify-content: flex-end;
 `;
 
 const CharactersRow = styled(Row)`
@@ -86,12 +88,18 @@ const CustomLink = styled(Link)`
   color: black;
 `;
 
+const InfoMessageIcon = styled(FontAwesomeIcon)`
+  height: 48px;
+  width: 48px;
+  color: rgb(207, 207, 207);
+`;
+
 export {
   Row,
   Column,
   AppContainer,
   Container,
-  LoaderContainer,
+  LoaderAndErrorContainer,
   HeaderContainer,
   BodyContainer,
   DetailsContainer,
@@ -102,4 +110,5 @@ export {
   ActionsRow,
   CharactersRow,
   CustomLink,
+  InfoMessageIcon,
 };

@@ -14,6 +14,17 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
+/**
+ * The Sidebar component displays a sidebar with navigation items
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Sidebar />
+ * ```
+ *
+ * @return A React component that represents the sidebar of the application
+ */
 function Sidebar() {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);

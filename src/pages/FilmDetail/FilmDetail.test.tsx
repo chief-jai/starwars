@@ -2,6 +2,11 @@ import { screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { render } from "utils/testing";
 import FilmDetail from "./FilmDetail";
+import { server } from "../../../mocks/server";
+import {
+  getCharacterByIdError,
+  getFilmByIdError,
+} from "services/hooks/starwars/mockHandlers";
 
 const renderFilmDetail = () => {
   return render(<FilmDetail />, { wrapper: MemoryRouter });
@@ -109,5 +114,41 @@ describe("Film Detail", () => {
     });
 
     expect(screen.getByText(/characters from/i)).toBeInTheDocument();
+  });
+
+  it("should render the FilmDetail component with Error message when fetching characters", async () => {
+    server.use(getCharacterByIdError);
+
+    renderFilmDetail();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
+  });
+
+  it("should render the FilmDetail component with Error message when fetching films", async () => {
+    server.use(getFilmByIdError);
+
+    renderFilmDetail();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
   });
 });

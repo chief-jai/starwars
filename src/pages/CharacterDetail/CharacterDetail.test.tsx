@@ -2,6 +2,12 @@ import { screen, waitFor } from "@testing-library/react";
 import CharacterDetail from "./CharacterDetail";
 import { MemoryRouter } from "react-router-dom";
 import { render } from "utils/testing";
+import { server } from "../../../mocks/server";
+import {
+  getCharacterByIdError,
+  getFilmsError,
+  getPlanetByIdError,
+} from "services/hooks/starwars/mockHandlers";
 
 const renderCharacterDetail = () => {
   return render(<CharacterDetail />, { wrapper: MemoryRouter });
@@ -119,5 +125,59 @@ describe("Character Detail", () => {
     expect(screen.getByText(/george lucas/i)).toBeInTheDocument();
 
     expect(screen.getByText("1977-05-25")).toBeInTheDocument();
+  });
+
+  it("should render the CharacterDetail component with Error message when fetching characters", async () => {
+    server.use(getCharacterByIdError);
+
+    renderCharacterDetail();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
+  });
+
+  it("should render the CharacterDetail component with Error message when fetching planets", async () => {
+    server.use(getPlanetByIdError);
+
+    renderCharacterDetail();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
+  });
+
+  it("should render the CharacterDetail component with Error message when fetching films", async () => {
+    server.use(getFilmsError);
+
+    renderCharacterDetail();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
   });
 });

@@ -26,6 +26,26 @@ interface HeaderProps {
   onBack?: () => void;
 }
 
+/**
+ * The Header component displays a header with a title, icon, subtitle, description, and buttons
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Header {...headerProps} />
+ * ```
+ *
+ * @param id - The id of the header
+ * @param title - The title of the header
+ * @param icon - The icon of the header
+ * @param subtitle - The subtitle of the header
+ * @param description - The description of the header
+ * @param buttons - The buttons to be displayed the header
+ * @param className - The class name of the header
+ * @param onBack - The function to be called when the back button is clicked
+ *
+ * @return A React component that represents the header of a page
+ */
 function Header({
   id,
   title,

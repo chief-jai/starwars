@@ -55,4 +55,17 @@ test.describe("Film Detail Page", () => {
     await expect(page.getByText("R2-D2")).toBeVisible();
     await expect(page.getByText("Darth Vader")).toBeVisible();
   });
+
+  test("render character detail page with appropriate error message", async ({
+    page,
+  }) => {
+    await page.goto("/films/100");
+
+    await expect(
+      page.getByText("Oops! There was an error fetching the data.")
+    ).toBeVisible();
+    await expect(
+      page.getByText("Please try again later. Thank you for your patience.")
+    ).toBeVisible();
+  });
 });

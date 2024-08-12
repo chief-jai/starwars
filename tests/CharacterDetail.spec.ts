@@ -55,4 +55,17 @@ test.describe("Character Detail Page", () => {
     await expect(page.getByText("Return of the Jedi")).toBeVisible();
     await expect(page.getByText("Revenge of the Sith")).toBeVisible();
   });
+
+  test("render character detail page with appropriate error message", async ({
+    page,
+  }) => {
+    await page.goto("/100");
+
+    await expect(
+      page.getByText("Oops! There was an error fetching the data.")
+    ).toBeVisible();
+    await expect(
+      page.getByText("Please try again later. Thank you for your patience.")
+    ).toBeVisible();
+  });
 });

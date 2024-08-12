@@ -2,6 +2,11 @@ import { screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { render } from "utils/testing";
 import FilmsList from "./FilmsList";
+import {
+  getFilmsEmpty,
+  getFilmsError,
+} from "services/hooks/starwars/mockHandlers";
+import { server } from "../../../mocks/server";
 
 const renderFilmsList = () => {
   return render(<FilmsList />, { wrapper: MemoryRouter });
@@ -150,5 +155,59 @@ describe("Films List", () => {
     await user.click(viewButton);
 
     expect(mockedNavigate).toHaveBeenCalledWith("/films/1");
+  });
+
+  it("should render the FilmsList component with Error message when fetching films", async () => {
+    server.use(getFilmsError);
+
+    renderFilmsList();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText("Oops! There was an error fetching the data.")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please try again later. Thank you for your patience.")
+    ).toBeInTheDocument();
+  });
+
+  it("should render the FilmsList component with filtered results on search", async () => {
+    const { user } = renderFilmsList();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText("Search by name...");
+
+    await user.type(searchInput, "new");
+
+    const film = await screen.findByText(/a new hope/i);
+
+    expect(film).toBeInTheDocument();
+  });
+
+  it("should render the FilmsList component with no results on search", async () => {
+    server.use(getFilmsEmpty);
+
+    const { user } = renderFilmsList();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loadingAnimation")).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText("Search by name...");
+
+    await user.type(searchInput, "test");
+
+    const noResults = await screen.findByText("No films found");
+
+    expect(noResults).toBeInTheDocument();
+
+    expect(screen.getByText(/please refine your query/i)).toBeInTheDocument();
   });
 });

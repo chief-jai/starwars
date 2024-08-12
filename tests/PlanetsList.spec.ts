@@ -67,4 +67,36 @@ test.describe("Planets List Page", () => {
     await expect(page.getByText(/coruscant/i)).toBeVisible();
     await expect(page.getByText(/kamino/i)).toBeVisible();
   });
+
+  test("render planets List page with appropriate search input", async ({
+    page,
+  }) => {
+    await page.goto("/planets");
+
+    await expect(page.getByPlaceholder("search by name...")).toBeVisible();
+  });
+
+  test("render planets list page with filtered data", async ({ page }) => {
+    await page.goto("/planets");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("Tatooine");
+
+    await expect(page.getByText("Tatooine")).toBeVisible();
+
+    await expect(page.getByText("Hoth")).toBeHidden();
+  });
+
+  test("render planets list page with no results found", async ({ page }) => {
+    await page.goto("/planets");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("random");
+
+    await expect(page.getByText("No planets found")).toBeVisible();
+
+    await expect(page.getByText("Please refine your query")).toBeVisible();
+  });
 });

@@ -2,6 +2,7 @@ import {
   faCalendar,
   faFilm,
   faList,
+  faSearch,
   faTableCells,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -10,11 +11,13 @@ import Button from "@mui/joy/Button";
 import ButtonGroup from "@mui/joy/ButtonGroup";
 import CardContent from "@mui/joy/CardContent";
 import CircularProgress from "@mui/joy/CircularProgress";
+import Input from "@mui/joy/Input";
 import Table from "@mui/joy/Table";
 import Typography from "@mui/joy/Typography";
 import Header from "components/Header/Header";
+import InfoMessage from "components/shared/InfoMessage/InfoMessage";
 import PreviewCard from "components/shared/PreviewCard/PreviewCard";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetFilms } from "services/hooks/starwars/starwars";
 import {
@@ -24,7 +27,7 @@ import {
   Container,
   CustomLink,
   HeaderContainer,
-  LoaderContainer,
+  LoaderAndErrorContainer,
 } from "styles";
 import {
   capitalizeFirstCharacter,
@@ -32,23 +35,52 @@ import {
   getId,
 } from "utils/helpers";
 
+/**
+ * The FilmsList component displays a list of films in a list or table view
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <FilmsList />
+ * ```
+ *
+ * @return A React component that represents a list of films
+ */
 function FilmsList() {
   const [isListView, setIsListView] = useState(true);
-  const { data: filmsData } = useGetFilms();
+  const [searchValue, setSearchValue] = useState("");
+  const { data: filmsData, isError: isFilmsError } = useGetFilms();
   const description = `Showing 1 - ${filmsData?.count} of ${filmsData?.count} films`;
 
   const navigate = useNavigate();
 
-  if (!filmsData || !filmsData.results.length) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  if (isFilmsError) {
     return (
-      <LoaderContainer>
-        <CircularProgress data-testid="loadingAnimation" size="md" />
-      </LoaderContainer>
+      <InfoMessage
+        id="filmsListError"
+        secondaryMessage="Please try again later. Thank you for your patience."
+      />
     );
   }
 
+  if (!filmsData) {
+    return (
+      <LoaderAndErrorContainer>
+        <CircularProgress data-testid="loadingAnimation" size="md" />
+      </LoaderAndErrorContainer>
+    );
+  }
+
+  const filteredFilms = filmsData.results.filter(
+    (film) => film.title.toLowerCase().indexOf(searchValue) !== -1
+  );
+
   return (
-    filmsData && (
+    filteredFilms && (
       <Container>
         <HeaderContainer>
           <Header
@@ -81,11 +113,28 @@ function FilmsList() {
                 Table View
               </Button>
             </ButtonGroup>
+
+            <Input
+              placeholder="Search by name..."
+              value={searchValue}
+              onChange={handleChange}
+              startDecorator={<FontAwesomeIcon icon={faSearch} />}
+              sx={{ width: "320px" }}
+            />
           </ActionsRow>
+
+          {!filteredFilms.length && (
+            <InfoMessage
+              id="filmsListEmpty"
+              icon={faSearch}
+              primaryMessage="No films found"
+              secondaryMessage="Please refine your query"
+            />
+          )}
 
           {isListView && (
             <CharactersRow data-testid="films-list">
-              {filmsData.results.map((film) => (
+              {filteredFilms.map((film) => (
                 <PreviewCard
                   key={film.title}
                   src={getFilmImageUrl(film.url)}

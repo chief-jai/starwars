@@ -91,4 +91,38 @@ test.describe("Character List Page", () => {
       page.getByRole("cell", { name: "Luke Skywalker" })
     ).toBeVisible();
   });
+
+  test("render characters List page with appropriate search input", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    await expect(page.getByPlaceholder("search by name...")).toBeVisible();
+  });
+
+  test("render characters list page with filtered data", async ({ page }) => {
+    await page.goto("/");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("Luke");
+
+    await expect(page.getByText("Luke Skywalker")).toBeVisible();
+
+    await expect(page.getByText("Darth Vader")).toBeHidden();
+  });
+
+  test("render characters list page with no results found", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const searchInput = await page.getByPlaceholder("search by name...");
+
+    await searchInput.fill("random");
+
+    await expect(page.getByText("No characters found")).toBeVisible();
+
+    await expect(page.getByText("Please refine your query")).toBeVisible();
+  });
 });

@@ -75,4 +75,46 @@ test.describe("Starship List Page", () => {
     await expect(page.getByText(/executor/i).first()).toBeVisible();
     await expect(page.getByText(/rebel transport/i)).toBeVisible();
   });
+
+  test("render starships List page with appropriate search input", async ({
+    page,
+  }) => {
+    await page.goto("/starships");
+
+    await expect(
+      page.getByPlaceholder("search by name or model...")
+    ).toBeVisible();
+  });
+
+  test("render starships list page with filtered data", async ({ page }) => {
+    await page.goto("/starships");
+
+    const searchInput = await page.getByPlaceholder(
+      "search by name or model..."
+    );
+
+    await searchInput.fill("Death Star");
+
+    await expect(page.getByText("Death Star")).toBeVisible();
+
+    await expect(
+      page.getByText("Y-wing", {
+        exact: true,
+      })
+    ).toBeHidden();
+  });
+
+  test("render starships list page with no results found", async ({ page }) => {
+    await page.goto("/starships");
+
+    const searchInput = await page.getByPlaceholder(
+      "search by name or model..."
+    );
+
+    await searchInput.fill("random");
+
+    await expect(page.getByText("No starships found")).toBeVisible();
+
+    await expect(page.getByText("Please refine your query")).toBeVisible();
+  });
 });
