@@ -63,6 +63,7 @@ function CharactersList() {
   const {
     data: characterData,
     isSuccess: isCharactersSuccess,
+    isFetching: isCharactersLoading,
     isError: isCharacterError,
   } = useGetCharacters(currentPage.toString(), debouncedSearchValue.trim());
   const { data: planetData, isError: isPlanetsError } =
@@ -140,7 +141,7 @@ function CharactersList() {
     );
   }
 
-  if (!characterData && !planetData.length) {
+  if ((!characterData && !planetData.length) || isCharactersLoading) {
     return (
       <LoaderAndErrorContainer>
         <CircularProgress data-testid="loadingAnimation" size="md" />
