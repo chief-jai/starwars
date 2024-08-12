@@ -68,6 +68,12 @@ To run e2e tests with UI
 npm run test:e2e
 ```
 
+Note: If you have run into issues when running e2e tests related to browser launch then you may be missing the browser executables. Run the following command
+
+```
+npx playwright install
+```
+
 To run e2e tests as headless
 
 ```
