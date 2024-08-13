@@ -86,8 +86,6 @@ function CharacterDetail() {
     );
   };
 
-  console.log(isCharacterError, isPlanetError, isFilmError);
-
   if (isCharacterError || isPlanetError || isFilmError) {
     return (
       <InfoMessage
